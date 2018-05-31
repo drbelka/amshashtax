@@ -1,0 +1,33 @@
+import itertools
+import requests
+import os
+basefolder = 
+# basefolder = "C://gemeente_panorama/"
+pano_id = 'TMX7315120208-000073_pano_0005_000446'
+
+folder = basefolder + pano_id
+
+#if not os.exists(folder):
+#    os.mkdir(folder)
+
+letters = ["f", "r","b","l"]
+numbers1 = range(4)
+numbers2 = range(3)
+log = []
+for (letter, number1, number2) in itertools.product(letters, numbers1, numbers2):
+    url = "https://data.amsterdam.nl/panorama/2016/06/09/TMX7315120208-000073/pano_0005_000446/cubic/3/%s/%s/%s.jpg"%(letter, number1, number2)
+    savefile = folder + letter + str(number1) + ".jpg"
+    
+    try:
+        image = requests.get(url)
+    except requests.exceptions.RequestException as error_message:
+        print error_message
+        pass
+    
+    if image.status_code == 200:
+        with open(savefile, "wb") as photo:
+            photo.write(image.content)
+    responsje =image.status_code
+    log.append([letter, number, responsje])
+    
+    print url

@@ -1,0 +1,41 @@
+# Please, fix this code
+import os
+import sys
+from PIL import Image
+import itertools
+import time
+import json
+
+
+
+def stitch(pano_id, folder_load = "C:/Users/A667777/Documents/Scraping_Flickr/pano/", folder_save = "C:/Users/A667777/Documents/Scraping_Flickr/pano/"):
+    total_width = 512*4
+    total_height = 512*3
+    
+    numbers1 = range(4)
+    numbers2 = range(3)
+
+    for letter in ['f', 'b', 'r', 'l']:
+        new_im = Image.new('RGB', (total_width, total_height))
+        for number1, number2 in itertools.product(numbers1, numbers2):
+            x_offset = number1*512
+            y_offset = number2*512
+    
+    
+            foto = folder_load + pano_id + '_%s%s%s.jpg'%(letter,number2,number1,)
+            print foto           
+# im = Image.open(folder_load + foto)
+            im = Image.open(foto)
+            
+            new_im.paste(im, (x_offset, y_offset))
+        
+
+        new_im.save(folder_save + pano_id + '_' + letter + '.jpg')
+
+with open("D:/gemeente_panorama/panisch0.txt") as meta:
+    panos = json.load(meta.read)
+
+
+for pano in panos:
+    pano_id = pano['pano_id']
+    stitch(pano_id)
